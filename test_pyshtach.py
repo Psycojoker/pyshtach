@@ -19,3 +19,7 @@ def test_int():
 
 def test_dashed_words():
     parse("a -b -drf --foo")
+
+
+def test_string():
+    parse('"foor" "bar" \'baz\'')

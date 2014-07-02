@@ -3,9 +3,10 @@ from rply import ParserGenerator, LexerGenerator
 lg = LexerGenerator()
 lg.add("NAME", r"[a-zA-Z0-9_-]+")
 lg.add("INT", r"\d+")
+lg.add("STRING", r"'[^']+'|\"[^\"]+\"")
 lg.ignore(r"\s+")
 
-pg = ParserGenerator(["NAME", "INT"])
+pg = ParserGenerator(["NAME", "INT", "STRING"])
 
 @pg.production("main : expression")
 def main(args):
@@ -34,6 +35,7 @@ def atoms_many(args):
 
 @pg.production("atom : NAME")
 @pg.production("atom : INT")
+@pg.production("atom : STRING")
 def atom(args):
     name, = args
     return name.value
