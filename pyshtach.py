@@ -4,14 +4,32 @@ lg = LexerGenerator()
 lg.add("NAME", r"[a-zA-Z0-9_-]+")
 lg.add("INT", r"\d+")
 lg.add("STRING", r"'[^']+'|\"[^\"]+\"")
-lg.ignore(r"\s+")
+lg.add("SEMICOLON", r";")
+lg.add("ENDL", r"\r\n")
+lg.add("ENDL", r"\n")
+lg.ignore(r"[ 	]+")
 
-pg = ParserGenerator(["NAME", "INT", "STRING"])
+pg = ParserGenerator(["NAME", "INT", "STRING", "SEMICOLON", "ENDL"])
 
-@pg.production("main : statement")
+@pg.production("main : statements")
 def main(args):
+    return args[0]
+
+@pg.production("statements : statement")
+def statements_one(args):
     expression, = args
-    return expression
+    return [expression]
+
+@pg.production("statements : statement separator statements")
+def statements_many(args):
+    statement, _, statements = args
+    return [statement] + statements
+
+@pg.production("separator : SEMICOLON")
+@pg.production("separator : ENDL")
+def separator(args):
+    # don't care
+    return None
 
 @pg.production("statement : atom")
 def expression_one(args):

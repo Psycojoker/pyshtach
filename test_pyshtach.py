@@ -23,3 +23,7 @@ def test_dashed_words():
 
 def test_string():
     parse('"foor" "bar" \'baz\'')
+
+
+def test_many_statements():
+    assert len(parse('foo; bar\nbaz')) == 3
