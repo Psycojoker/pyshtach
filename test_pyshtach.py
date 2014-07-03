@@ -31,3 +31,7 @@ def test_many_statements():
 
 def test_escaped_space():
     assert len(parse("a\\ b")[0]) == 1
+
+
+def test_tab_escaped():
+    parse("a	b")

@@ -15,7 +15,7 @@ class Parser():
         for token in tokens:
             lg.add(*token)
 
-        lg.ignore(r"[   ]+")
+        lg.ignore(r"[ 	]+")
 
         pg = ParserGenerator([x[0] for x in tokens])
 
