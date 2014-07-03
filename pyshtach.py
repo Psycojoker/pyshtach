@@ -66,8 +66,11 @@ class Parser():
             name, = args
             return name.value
 
-        self.lexer = lg.build()
-        self.parser = pg.build()
+        self.pg = pg
+        self.lg = lg
+
+        self.lexer = self.lg.build()
+        self.parser = self.pg.build()
 
     def parse(self, foo):
         if not foo:
