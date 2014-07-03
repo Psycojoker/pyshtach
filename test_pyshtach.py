@@ -27,3 +27,7 @@ def test_string():
 
 def test_many_statements():
     assert len(parse('foo; bar\nbaz')) == 3
+
+
+def test_escaped_space():
+    assert len(parse("a\\ b")[0]) == 1

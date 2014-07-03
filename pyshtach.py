@@ -1,7 +1,7 @@
 from rply import ParserGenerator, LexerGenerator
 
 lg = LexerGenerator()
-lg.add("NAME", r"[a-zA-Z0-9_-]+")
+lg.add("NAME", r"([a-zA-Z0-9_-]|\\ )+")
 lg.add("INT", r"\d+")
 lg.add("STRING", r"'[^']+'|\"[^\"]+\"")
 lg.add("SEMICOLON", r";")
