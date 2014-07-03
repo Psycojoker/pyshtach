@@ -8,17 +8,17 @@ lg.ignore(r"\s+")
 
 pg = ParserGenerator(["NAME", "INT", "STRING"])
 
-@pg.production("main : expression")
+@pg.production("main : statement")
 def main(args):
     expression, = args
     return expression
 
-@pg.production("expression : atom")
+@pg.production("statement : atom")
 def expression_one(args):
     atom, = args
     return [atom]
 
-@pg.production("expression : atom atoms")
+@pg.production("statement : atom atoms")
 def expression_many(args):
     atom, atoms = args
     return [atom] + atoms
