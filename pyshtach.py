@@ -3,15 +3,21 @@ from rply import ParserGenerator, LexerGenerator
 class Parser():
     def __init__(self):
         lg = LexerGenerator()
-        lg.add("NAME", r"([a-zA-Z0-9_-]|\\ )+")
-        lg.add("INT", r"\d+")
-        lg.add("STRING", r"'[^']+'|\"[^\"]+\"")
-        lg.add("SEMICOLON", r";")
-        lg.add("ENDL", r"\r\n")
-        lg.add("ENDL", r"\n")
-        lg.ignore(r"[ 	]+")
+        tokens = [
+            ("NAME", r"([a-zA-Z0-9_-]|\\ )+"),
+            ("INT", r"\d+"),
+            ("STRING", r"'[^']+'|\"[^\"]+\""),
+            ("SEMICOLON", r";"),
+            ("ENDL", r"\r\n"),
+            ("ENDL", r"\n"),
+        ]
 
-        pg = ParserGenerator(["NAME", "INT", "STRING", "SEMICOLON", "ENDL"])
+        for token in tokens:
+            lg.add(*token)
+
+        lg.ignore(r"[   ]+")
+
+        pg = ParserGenerator([x[0] for x in tokens])
 
         @pg.production("main : statements")
         def main(args):
