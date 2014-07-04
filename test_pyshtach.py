@@ -35,3 +35,7 @@ def test_escaped_space():
 
 def test_tab_escaped():
     parse("a	b")
+
+
+def test_path_atom():
+    parse("a/b/c/../pouet")

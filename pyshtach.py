@@ -7,6 +7,7 @@ class Parser():
             ("NAME", r"([a-zA-Z0-9_-]|\\ )+"),
             ("INT", r"\d+"),
             ("STRING", r"'[^']+'|\"[^\"]+\""),
+            ("PATH", r"([a-zA-Z0-9/._-]|\\ )+"),
             ("SEMICOLON", r";"),
             ("ENDL", r"\r\n"),
             ("ENDL", r"\n"),
@@ -62,6 +63,7 @@ class Parser():
         @pg.production("atom : NAME")
         @pg.production("atom : INT")
         @pg.production("atom : STRING")
+        @pg.production("atom : PATH")
         def atom(args):
             name, = args
             return name.value
