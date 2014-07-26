@@ -4,6 +4,7 @@ class Parser():
     def __init__(self):
         lg = LexerGenerator()
         tokens = [
+            ("PROTO", r"[a-zA-Z]+://[^ ]+"),
             ("NAME", r"([a-zA-Z0-9_-]|\\ )+"),
             ("INT", r"\d+"),
             ("STRING", r"'[^']+'|\"[^\"]+\""),
@@ -64,6 +65,7 @@ class Parser():
         @pg.production("atom : INT")
         @pg.production("atom : STRING")
         @pg.production("atom : PATH")
+        @pg.production("atom : PROTO")
         def atom(args):
             name, = args
             return name.value

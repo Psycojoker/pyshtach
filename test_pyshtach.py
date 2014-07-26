@@ -39,3 +39,9 @@ def test_tab_escaped():
 
 def test_path_atom():
     parse("a/b/c/../pouet")
+
+
+def test_proto():
+    parse("ssh://pouet")
+    parse("http://pouet")
+    parse("http://pouet.com:2000/qsd.php")
