@@ -26,11 +26,11 @@ def test_string():
 
 
 def test_many_statements():
-    assert len(parse('foo; bar\nbaz')) == 3
+    assert parse('foo; bar\nbaz')
 
 
 def test_escaped_space():
-    assert len(parse("a\\ b")[0]) == 1
+    assert parse("a\\ b")["type"] == "statement"
 
 
 def test_tab_escaped():

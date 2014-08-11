@@ -28,18 +28,28 @@ class Parser():
         @pg.production("statements : statement")
         def statements_one(args):
             expression, = args
-            return [expression]
+            return {
+                "type": "statement",
+                "content": expression,
+            }
 
         @pg.production("statements : statement separator statements")
         def statements_many(args):
-            statement, _, statements = args
-            return [statement] + statements
+            statement, separtor, statements = args
+            return {
+                "type": "statement_infix_operator",
+                "content": {
+                    "left": statement,
+                    "right": statements,
+                    "operator": separtor,
+                }
+            }
 
         @pg.production("separator : SEMICOLON")
         @pg.production("separator : ENDL")
         def separator(args):
             # don't care
-            return None
+            return args[0].value
 
         @pg.production("statement : atom")
         def expression_one(args):
