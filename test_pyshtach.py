@@ -1,4 +1,4 @@
-from pyshtach import parse
+from pyshtach import parse, shell
 
 
 def test_empty():
@@ -51,3 +51,7 @@ def test_infix_statement_operator_return_both_statements():
     stuff = parse("a; b")
     assert stuff["content"]["left"]["type"] == "statement"
     assert stuff["content"]["right"]["type"] == "statement"
+
+
+def test_shell_eval():
+    shell.eval("ls")
