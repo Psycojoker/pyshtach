@@ -1,5 +1,5 @@
 import os
-import operator
+import sys
 import subprocess
 
 from rply import ParserGenerator, LexerGenerator
@@ -129,7 +129,14 @@ class Binary(object):
         self.binary = binary
 
     def __call__(self, arguments):
-        return subprocess.call(arguments)
+        process = subprocess.Popen(arguments,
+                                   env=os.environ,
+                                   stdout=sys.stdout,
+                                   stderr=sys.stderr,
+                                   stdin=sys.stdin,
+                                   cwd=os.environ["PWD"])
+
+        process.wait()
 
 
 parse = Parser().parse
