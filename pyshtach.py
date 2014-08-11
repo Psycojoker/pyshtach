@@ -102,7 +102,7 @@ class Parser():
 class Shell(object):
     def __init__(self):
         self.parser = Parser()
-        self.callables = {}
+        self.env = {}
 
     def eval(self, code):
         self.dispatch(self.parser.parse(code))
@@ -111,9 +111,9 @@ class Shell(object):
         getattr(self, "eval_" + node["type"])(node["content"])
 
     def eval_statement(self, content):
-        if content[0] not in self.callables:
+        if content[0] not in self.env:
             raise Exception("Command not found: %s" % content[0])
-        self.callables[content[0]](content)
+        self.env[content[0]](content)
 
     def eval_statement_infix_operator(self, content):
         self.dispatch(content["left"])
@@ -138,4 +138,4 @@ for path in os.environ["PATH"].split(":"):
         continue
 
     for binary in os.listdir(path):
-        shell.callables[binary] = Binary(binary=binary, path=os.path.join(path, binary))
+        shell.env[binary] = Binary(binary=binary, path=os.path.join(path, binary))
