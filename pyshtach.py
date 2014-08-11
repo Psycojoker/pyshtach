@@ -102,7 +102,7 @@ class Parser():
 class Shell(object):
     def __init__(self):
         self.parser = Parser()
-        self.callables = reduce(operator.add, map(os.listdir, filter(os.path.exists, os.environ["PATH"].split(":"))), [])
+        self.callables = {}
 
     def eval(self, code):
         self.dispatch(self.parser.parse(code))
@@ -113,12 +113,29 @@ class Shell(object):
     def eval_statement(self, content):
         if content[0] not in self.callables:
             raise Exception("Command not found: %s" % content[0])
-        subprocess.call(content)
+        self.callables[content[0]](content)
 
     def eval_statement_infix_operator(self, content):
         self.dispatch(content["left"])
         self.dispatch(content["right"])
 
 
+class Binary(object):
+    def __init__(self, binary, path):
+        self.path = path
+        self.binary = binary
+
+    def __call__(self, arguments):
+        return subprocess.call(arguments)
+
+
 parse = Parser().parse
 shell = Shell()
+
+
+for path in os.environ["PATH"].split(":"):
+    if not os.path.exists(path):
+        continue
+
+    for binary in os.listdir(path):
+        shell.callables[binary] = Binary(binary=binary, path=os.path.join(path, binary))
