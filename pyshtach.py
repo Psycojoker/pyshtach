@@ -39,7 +39,10 @@ class Parser():
             return {
                 "type": "statement_infix_operator",
                 "content": {
-                    "left": statement,
+                    "left": {
+                        "type": "statement",
+                        "content": statement,
+                    },
                     "right": statements,
                     "operator": separtor,
                 }

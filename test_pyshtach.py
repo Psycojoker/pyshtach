@@ -45,3 +45,9 @@ def test_proto():
     parse("ssh://pouet")
     parse("http://pouet")
     parse("http://pouet.com:2000/qsd.php")
+
+
+def test_infix_statement_operator_return_both_statements():
+    stuff = parse("a; b")
+    assert stuff["content"]["left"]["type"] == "statement"
+    assert stuff["content"]["right"]["type"] == "statement"
