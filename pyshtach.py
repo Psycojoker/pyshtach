@@ -142,7 +142,7 @@ class Binary(object):
 class ChangeDirectory(object):
     def __call__(self, arguments):
         arguments = arguments[1:]
-        os.environ["PWD"] = arguments[0]
+        os.environ["PWD"] = arguments[0] if arguments else os.environ["HOME"]
 
 parse = Parser().parse
 shell = Shell()
