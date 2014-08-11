@@ -119,6 +119,9 @@ class Shell(object):
         self.dispatch(content["left"])
         self.dispatch(content["right"])
 
+    def run(self, function):
+        function(self)
+
 
 class Binary(object):
     def __init__(self, binary, path):
@@ -133,9 +136,11 @@ parse = Parser().parse
 shell = Shell()
 
 
-for path in os.environ["PATH"].split(":"):
-    if not os.path.exists(path):
-        continue
+@shell.run
+def add_binaries(shell):
+    for path in os.environ["PATH"].split(":"):
+        if not os.path.exists(path):
+            continue
 
-    for binary in os.listdir(path):
-        shell.env[binary] = Binary(binary=binary, path=os.path.join(path, binary))
+        for binary in os.listdir(path):
+            shell.env[binary] = Binary(binary=binary, path=os.path.join(path, binary))
