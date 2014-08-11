@@ -139,6 +139,11 @@ class Binary(object):
         process.wait()
 
 
+class ChangeDirectory(object):
+    def __call__(self, arguments):
+        arguments = arguments[1:]
+        os.environ["PWD"] = arguments[0]
+
 parse = Parser().parse
 shell = Shell()
 
@@ -151,3 +156,8 @@ def add_binaries(shell):
 
         for binary in os.listdir(path):
             shell.env[binary] = Binary(binary=binary, path=os.path.join(path, binary))
+
+
+@shell.run
+def add_buildins(shell):
+    shell.env["cd"] = ChangeDirectory()
