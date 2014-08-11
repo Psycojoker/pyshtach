@@ -1,3 +1,7 @@
+import os
+import operator
+import subprocess
+
 from rply import ParserGenerator, LexerGenerator
 
 class Parser():
@@ -95,4 +99,26 @@ class Parser():
         return self.parser.parse(self.lexer.lex(foo))
 
 
+class Shell(object):
+    def __init__(self):
+        self.parser = Parser()
+        self.callables = reduce(operator.add, map(os.listdir, filter(os.path.exists, os.environ["PATH"].split(":"))), [])
+
+    def eval(self, code):
+        self.dispatch(self.parser.parse(code))
+
+    def dispatch(self, node):
+        getattr(self, "eval_" + node["type"])(node["content"])
+
+    def eval_statement(self, content):
+        if content[0] not in self.callables:
+            raise Exception("Command not found: %s" % content[0])
+        subprocess.call(content)
+
+    def eval_statement_infix_operator(self, content):
+        self.dispatch(content["left"])
+        self.dispatch(content["right"])
+
+
 parse = Parser().parse
+shell = Shell()
