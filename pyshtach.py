@@ -4,6 +4,11 @@ import subprocess
 
 from rply import ParserGenerator, LexerGenerator
 
+
+class ShellException(Exception):
+    pass
+
+
 class Parser():
     def __init__(self):
         lg = LexerGenerator()
