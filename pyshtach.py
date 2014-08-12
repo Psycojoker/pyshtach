@@ -117,7 +117,7 @@ class Shell(object):
 
     def eval_statement(self, content):
         if content[0] not in self.env:
-            raise Exception("Command not found: %s" % content[0])
+            raise ShellException("Command not found: %s" % content[0])
         self.env[content[0]](content)
 
     def eval_statement_infix_operator(self, content):
