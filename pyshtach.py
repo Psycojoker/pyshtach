@@ -129,8 +129,11 @@ class Shell(object):
 
     def loop(self):
         while True:
-            sys.stdout.write("> ")
-            self.eval(sys.stdin.readline().rstrip())
+            sys.stdout.write("%s > " % os.environ["PWD"])
+            try:
+                self.eval(sys.stdin.readline().rstrip())
+            except ShellException as e:
+                sys.stderr.write("Error: %s\n" % e)
 
 
 class Binary(object):
