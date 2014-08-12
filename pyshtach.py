@@ -14,11 +14,11 @@ class Parser():
         lg = LexerGenerator()
         tokens = [
             ("PROTO", r"[a-zA-Z]+://[^ ]+"),
-            ("NAME", r"([a-zA-Z0-9_-]|\\ )+"),
             ("INT", r"\d+"),
             ("STRING", r"'[^']+'|\"[^\"]+\""),
             ("PATH", r"([a-zA-Z0-9/._-]|\\ )+"),
             ("PATH", r"~([a-zA-Z0-9/._-]|\\ )*"),
+            ("NAME", r"([a-zA-Z0-9_-]|\\ )+"),
             ("SEMICOLON", r";"),
             ("ENDL", r"\r\n"),
             ("ENDL", r"\n"),
@@ -157,29 +157,30 @@ class Binary(object):
         process.wait()
 
 
-class ChangeDirectory(object):
-    def __call__(self, arguments):
-        arguments = arguments[1:]
-        if not arguments:
-            new_path = os.environ["HOME"]
+def cd(arguments):
+    arguments = arguments[1:]
+    if not arguments:
+        new_path = os.environ["HOME"]
 
-        elif arguments[0] == "-":
-            new_path = os.environ["OLDPWD"]
+    elif arguments[0] == "-":
+        new_path = os.environ["OLDPWD"]
 
-        elif arguments[0].startswith("~"):
-            new_path = os.path.expanduser(arguments[0])
+    elif arguments[0].startswith("~"):
+        new_path = os.path.expanduser(arguments[0])
 
-        elif not arguments[0].startswith("/"):
-            new_path = os.path.join(os.environ["PWD"], arguments[0])
+    elif not arguments[0].startswith("/"):
+        new_path = os.path.join(os.environ["PWD"], arguments[0])
 
-        else:
-            new_path = arguments[0]
+    else:
+        new_path = arguments[0]
 
-        if not os.path.exists(new_path):
-            raise ShellException("Can't cd to '%s', path doesn't exist" % new_path)
+    if not os.path.exists(new_path):
+        raise ShellException("Can't cd to '%s', path doesn't exist" % new_path)
 
-        os.environ["OLDPWD"] = os.environ["PWD"]
-        os.environ["PWD"] = new_path
+    os.environ["OLDPWD"] = os.environ["PWD"]
+    os.environ["PWD"] = new_path
+
+
 
 parse = Parser().parse
 shell = Shell()
@@ -197,7 +198,7 @@ def add_binaries(shell):
 
 @shell.run
 def add_buildins(shell):
-    shell.env["cd"] = ChangeDirectory()
+    shell.env["cd"] = cd
 
 
 if __name__ == '__main__':
