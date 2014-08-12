@@ -155,7 +155,19 @@ class Binary(object):
 class ChangeDirectory(object):
     def __call__(self, arguments):
         arguments = arguments[1:]
-        os.environ["PWD"] = arguments[0] if arguments else os.environ["HOME"]
+        if not arguments:
+            new_path = os.environ["HOME"]
+
+        elif not arguments[0].startswith("/"):
+            new_path = os.path.join(os.environ["PWD"], arguments[0])
+
+        else:
+            new_path = arguments[0]
+
+        if not os.path.exists(new_path):
+            raise ShellException("Can't cd to '%s', path doesn't exist" % new_path)
+
+        os.environ["PWD"] = new_path
 
 parse = Parser().parse
 shell = Shell()
