@@ -159,6 +159,9 @@ class ChangeDirectory(object):
         if not arguments:
             new_path = os.environ["HOME"]
 
+        elif arguments[0] == "-":
+            new_path = os.environ["OLDPWD"]
+
         elif arguments[0].startswith("~"):
             new_path = os.path.expanduser(arguments[0])
 
@@ -171,6 +174,7 @@ class ChangeDirectory(object):
         if not os.path.exists(new_path):
             raise ShellException("Can't cd to '%s', path doesn't exist" % new_path)
 
+        os.environ["OLDPWD"] = os.environ["PWD"]
         os.environ["PWD"] = new_path
 
 parse = Parser().parse
