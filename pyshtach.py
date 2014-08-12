@@ -18,6 +18,7 @@ class Parser():
             ("INT", r"\d+"),
             ("STRING", r"'[^']+'|\"[^\"]+\""),
             ("PATH", r"([a-zA-Z0-9/._-]|\\ )+"),
+            ("PATH", r"~([a-zA-Z0-9/._-]|\\ )*"),
             ("SEMICOLON", r";"),
             ("ENDL", r"\r\n"),
             ("ENDL", r"\n"),
@@ -157,6 +158,9 @@ class ChangeDirectory(object):
         arguments = arguments[1:]
         if not arguments:
             new_path = os.environ["HOME"]
+
+        elif arguments[0].startswith("~"):
+            new_path = os.path.expanduser(arguments[0])
 
         elif not arguments[0].startswith("/"):
             new_path = os.path.join(os.environ["PWD"], arguments[0])
