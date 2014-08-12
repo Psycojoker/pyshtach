@@ -176,11 +176,13 @@ def cd(shell, arguments):
     else:
         new_path = arguments[0]
 
+    new_path = os.path.realpath(new_path)
+
     if not os.path.exists(new_path):
         raise ShellException("Can't cd to '%s', path doesn't exist" % new_path)
 
     os.environ["OLDPWD"] = os.environ["PWD"]
-    os.environ["PWD"] = os.path.realpath(new_path)
+    os.environ["PWD"] = new_path
 
 
 def exit(shell, _):
