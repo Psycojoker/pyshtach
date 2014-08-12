@@ -122,6 +122,11 @@ class Shell(object):
     def run(self, function):
         function(self)
 
+    def loop(self):
+        while True:
+            sys.stdout.write("> ")
+            self.eval(sys.stdin.readline().rstrip())
+
 
 class Binary(object):
     def __init__(self, binary, path):
@@ -161,3 +166,7 @@ def add_binaries(shell):
 @shell.run
 def add_buildins(shell):
     shell.env["cd"] = ChangeDirectory()
+
+
+if __name__ == '__main__':
+    shell.loop()
