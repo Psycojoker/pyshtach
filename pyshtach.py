@@ -132,7 +132,11 @@ class Shell(object):
         while True:
             sys.stdout.write("%s > " % os.environ["PWD"])
             try:
-                self.eval(sys.stdin.readline().rstrip())
+                user_input = sys.stdin.readline()
+                if user_input == "":
+                    break
+
+                self.eval(user_input.rstrip())
             except ShellException as e:
                 sys.stderr.write("Error: %s\n" % e)
 
