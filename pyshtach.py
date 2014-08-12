@@ -109,6 +109,7 @@ class Shell(object):
     def __init__(self):
         self.parser = Parser()
         self.env = {}
+        self.loop = True
 
     def eval(self, code):
         self.dispatch(self.parser.parse(code))
@@ -119,7 +120,7 @@ class Shell(object):
     def eval_statement(self, content):
         if content[0] not in self.env:
             raise ShellException("Command not found: %s" % content[0])
-        self.env[content[0]](content)
+        self.env[content[0]](self, content)
 
     def eval_statement_infix_operator(self, content):
         self.dispatch(content["left"])
@@ -128,8 +129,9 @@ class Shell(object):
     def run(self, function):
         function(self)
 
-    def loop(self):
-        while True:
+    def repl(self):
+        self.loop = True
+        while self.loop:
             sys.stdout.write("%s > " % os.environ["PWD"])
             try:
                 user_input = sys.stdin.readline()
@@ -146,7 +148,7 @@ class Binary(object):
         self.path = path
         self.binary = binary
 
-    def __call__(self, arguments):
+    def __call__(self, shell, arguments):
         process = subprocess.Popen(arguments,
                                    env=os.environ,
                                    stdout=sys.stdout,
@@ -157,7 +159,7 @@ class Binary(object):
         process.wait()
 
 
-def cd(arguments):
+def cd(shell, arguments):
     arguments = arguments[1:]
     if not arguments:
         new_path = os.environ["HOME"]
@@ -181,6 +183,8 @@ def cd(arguments):
     os.environ["PWD"] = new_path
 
 
+def exit(shell, _):
+    shell.loop = False
 
 parse = Parser().parse
 shell = Shell()
@@ -199,7 +203,8 @@ def add_binaries(shell):
 @shell.run
 def add_buildins(shell):
     shell.env["cd"] = cd
+    shell.env["exit"] = exit
 
 
 if __name__ == '__main__':
-    shell.loop()
+    shell.repl()
