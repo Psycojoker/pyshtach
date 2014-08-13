@@ -133,11 +133,9 @@ class Shell(object):
         self.loop = True
         while self.loop:
             try:
-                user_input = raw_input("\033[1;35m%s\033[0m $ " % os.environ["PWD"])
-                if user_input == "":
-                    break
-
-                self.eval(user_input.rstrip())
+                self.eval(raw_input("\033[1;35m%s\033[0m $ " % os.environ["PWD"]).rstrip())
+            except EOFError:
+                self.loop = False
             except KeyboardInterrupt:
                 sys.stdout.write("\n")
             except ShellException as e:
