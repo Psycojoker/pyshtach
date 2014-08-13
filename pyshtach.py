@@ -138,6 +138,8 @@ class Shell(object):
                     break
 
                 self.eval(user_input.rstrip())
+            except KeyboardInterrupt:
+                sys.stdout.write("\n")
             except ShellException as e:
                 sys.stderr.write("Error: %s\n" % e)
 
