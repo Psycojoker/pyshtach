@@ -132,9 +132,8 @@ class Shell(object):
     def repl(self):
         self.loop = True
         while self.loop:
-            sys.stdout.write("\033[1;35m%s\033[0m $ " % os.environ["PWD"])
             try:
-                user_input = sys.stdin.readline()
+                user_input = raw_input("\033[1;35m%s\033[0m $ " % os.environ["PWD"])
                 if user_input == "":
                     break
 
