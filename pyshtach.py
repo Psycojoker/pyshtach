@@ -16,6 +16,7 @@ class Parser():
             ("PROTO", r"[a-zA-Z]+://[^ ]+"),
             ("INT", r"\d+"),
             ("STRING", r"'[^']+'|\"[^\"]+\""),
+            ("NAME", r"--colors=always"),
             ("PATH", r"([a-zA-Z0-9/._-]|\\ )+"),
             ("PATH", r"~([a-zA-Z0-9/._-]|\\ )*"),
             ("NAME", r"([a-zA-Z0-9_-]|\\ )+"),

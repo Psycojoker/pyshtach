@@ -21,6 +21,10 @@ def test_dashed_words():
     parse("a -b -drf --foo")
 
 
+def test_args_with_equal():
+    parse("a --colors=always")
+
+
 def test_string():
     parse('"foor" "bar" \'baz\'')
 
