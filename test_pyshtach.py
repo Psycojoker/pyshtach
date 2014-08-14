@@ -1,4 +1,8 @@
-from pyshtach import parse
+from pyshtach import parse, Parser
+
+
+def lex(string):
+    return list(Parser().lexer.lex(string))
 
 
 def test_empty():
@@ -55,3 +59,11 @@ def test_infix_statement_operator_return_both_statements():
     stuff = parse("a; b")
     assert stuff["content"]["left"]["type"] == "statement"
     assert stuff["content"]["right"]["type"] == "statement"
+
+
+def test_lexer_lex_as_path():
+    assert lex("~bram/foo/bar")[0].name == "PATH"
+    assert len(lex("~bram/foo/bar")) == 1
+    assert lex("bram/foo/bar")[0].name == "PATH"
+    assert len(lex("bram/foo/bar")) == 1
+    assert lex("/bram/foo/bar")[0].name == "PATH"
