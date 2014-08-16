@@ -165,7 +165,7 @@ def cd(shell, arguments):
         new_path = os.environ["HOME"]
 
     elif arguments[0] == "-":
-        new_path = os.environ["OLDPWD"]
+        new_path = os.environ.get("OLDPWD", os.environ["PWD"])
 
     elif arguments[0].startswith("~"):
         new_path = os.path.expanduser(arguments[0])
