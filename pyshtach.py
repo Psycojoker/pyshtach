@@ -21,8 +21,7 @@ class Parser():
             ("PATH", r"~([a-zA-Z0-9/._-]|\\ )*"),
             ("NAME", r"([a-zA-Z0-9_-]|\\ )+"),
             ("SEMICOLON", r";"),
-            ("ENDL", r"\r\n"),
-            ("ENDL", r"\n"),
+            ("ENDL", r"\r?\n"),
         ]
 
         for token in tokens:
